@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORE Productivity Platform</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
+
+  <!--App JS -->
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-primary px-3">
+    <span class="navbar-brand mb-0 h1">CORE Productivity</span>
+    <button id="toggleMode" class="btn btn-light btn-sm">Toggle Dark Mode</button>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card shadow">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">Register Company</h2>
+            <form id="registerForm">
+              <div class="mb-3">
+                <input type="text" id="companyName" class="form-control" placeholder="Company Name" required>
+              </div>
+              <div class="mb-3">
+                <input type="email" id="registerEmail" class="form-control" placeholder="Admin Email" required>
+              </div>
+              <div class="mb-3">
+                <input type="password" id="registerPassword" class="form-control" placeholder="Password" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+            <p class="text-center mt-3"><a href="index.html">Back to Login</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
