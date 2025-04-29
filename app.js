@@ -1,6 +1,8 @@
-// Initialize Firebase
+// app.js
+
 /* global firebase */
-/*global location*/
+/* global location */
+
 const firebaseConfig = {
   apiKey: "AIzaSyCGW4_VqassdGCOJaGPkYLGYYvBs4QMcME",
   authDomain: "core-iii-web.firebaseapp.com",
@@ -14,18 +16,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-const analytics = firebase.analytics
-//see firebaseConfig for explanation
-// Dark mode toggle
-document.addEventListener("DOMContentLoaded", () => {
-  const darkModeBtn = document.getElementById("toggleMode");
-  if (darkModeBtn) {
-    darkModeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-    });
-  }
 
-  // Register form
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Register
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
@@ -37,7 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
       auth.createUserWithEmailAndPassword(email, password)
         .then((cred) => {
           return db.collection('companies').doc(cred.user.uid).set({
-            companyName: companyName
+            companyName: companyName,
+            email: email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
         })
         .then(() => {
@@ -51,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Login form
+  // Login
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
@@ -71,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Admin Page Functions
+  // Add Department
   const addDeptForm = document.getElementById("addDepartmentForm");
   if (addDeptForm) {
     addDeptForm.addEventListener("submit", (e) => {
@@ -93,6 +89,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Score Department
+  const scoreForm = document.getElementById("scoreForm");
+  if (scoreForm) {
+    scoreForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const deptName = document.getElementById("scoreDeptName").value;
+      const scoreValue = parseInt(document.getElementById("scoreValue").value, 10);
+
+      db.collection("departments").where("name", "==", deptName).get()
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            alert("Department not found.");
+            return;
+          }
+          querySnapshot.forEach((doc) => {
+            db.collection("departments").doc(doc.id).update({
+              points: firebase.firestore.FieldValue.increment(scoreValue)
+            });
+          });
+          alert("Score added.");
+          location.reload();
+        })
+        .catch((error) => {
+          console.error("Error scoring department: ", error.message);
+        });
+    });
+  }
+
+  // Set Weekly Challenge
   const challengeForm = document.getElementById("challengeForm");
   if (challengeForm) {
     challengeForm.addEventListener("submit", (e) => {
@@ -111,20 +136,54 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error setting challenge: ", error.message);
       });
     });
-  }
 
-  // Load Leaderboard
-  const leaderboardList = document.getElementById("leaderboardList");
-  if (leaderboardList) {
-    db.collection("departments")
-      .orderBy("points", "desc")
-      .onSnapshot((snapshot) => {
-        leaderboardList.innerHTML = "";
-        snapshot.forEach((doc) => {
-          const li = document.createElement("li");
-          li.textContent = `${doc.data().name} - ${doc.data().points} Points`;
-          leaderboardList.appendChild(li);
-        });
+    // Load latest challenge
+    db.collection("challenges").orderBy("createdAt", "desc").limit(1).get()
+      .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const challengeData = querySnapshot.docs[0].data();
+          document.getElementById("challengeDisplay").textContent = challengeData.challenge;
+        } else {
+          document.getElementById("challengeDisplay").textContent = "No challenge set.";
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading challenge: ", error.message);
       });
   }
+
+  // Leaderboard
+  const leaderboardList = document.getElementById("leaderboardList");
+  if (leaderboardList) {
+    db.collection("departments").orderBy("points", "desc").onSnapshot((snapshot) => {
+      leaderboardList.innerHTML = "";
+
+      if (snapshot.empty) {
+        leaderboardList.innerHTML = "<li class='list-group-item'>No departments yet.</li>";
+        return;
+      }
+
+      snapshot.forEach((doc) => {
+        const li = document.createElement("li");
+        li.textContent = `${doc.data().name} - ${doc.data().points} Points`;
+        li.classList.add("list-group-item");
+        leaderboardList.appendChild(li);
+      });
+    });
+  }
+
+  // Logout
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      auth.signOut()
+        .then(() => {
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          console.error("Logout error:", error.message);
+        });
+    });
+  }
+
 });
