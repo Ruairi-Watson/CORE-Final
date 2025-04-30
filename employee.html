@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CORE - Employee View</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+  <h1 class="mb-4">Company Leaderboard & Challenge</h1>
+
+  <div class="mb-5">
+    <h3>Current Weekly Challenge</h3>
+    <p id="employeeChallenge">Loading...</p>
+  </div>
+
+  <div>
+    <h3>Leaderboard</h3>
+    <ul id="employeeLeaderboard" class="list-group"></ul>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="employee.js" defer></script>
+
+</body>
+</html>
