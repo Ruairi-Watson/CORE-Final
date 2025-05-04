@@ -6,6 +6,14 @@
   <title>Register Company | CORE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("gn6ldKkOG1-i58EOG"); // Your public EmailJS key
+    })();
+  </script>
 </head>
 <body>
 
@@ -41,7 +49,7 @@
     </div>
   </div>
 
-  <!-- Firebase -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
