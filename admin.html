@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic meta -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CORE Admin Dashboard</title>
 
-  <!-- Bootstrap & Styles -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <!-- Bootstrap + optional styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-  <!-- Project Logic -->
+  <!-- Core logic -->
   <script src="app.js" defer></script>
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Top navbar -->
   <nav class="navbar navbar-dark bg-primary px-3 d-flex justify-content-between">
     <span class="navbar-brand mb-0 h1">CORE Admin</span>
     <div>
-      <button id="deleteAccountBtn" class="btn btn-outline-light btn-sm me-2">Delete My Account</button>
+      <a href="report-error.html" class="btn btn-light btn-sm me-2">Report an Issue</a>
       <button id="logoutBtn" class="btn btn-danger btn-sm">Logout</button>
     </div>
   </nav>
 
   <div class="container mt-4">
-
-    <!-- Dynamic Company Header -->
+    <!-- Dynamic company header -->
     <h2 id="companyNameHeader" class="text-center mb-4">Admin Dashboard</h2>
 
-    <!-- Add & Score Department -->
+    <!-- Add department -->
     <div class="row">
-      <!-- Add Department Form -->
       <div class="col-md-6 mb-4">
         <div class="card shadow">
           <div class="card-body">
             <h5 class="card-title">Add Department</h5>
-            <form id="addDepartmentForm">
+            <form id="addDepartmentForm" aria-label="Add Department Form">
               <div class="mb-3">
-                <input type="text" id="departmentName" class="form-control" placeholder="Department Name" required>
+                <input type="text" id="departmentName" class="form-control" placeholder="Department Name" required />
               </div>
               <div class="mb-3">
-                <input type="number" id="departmentPoints" class="form-control" placeholder="Starting Points" required>
+                <input type="number" id="departmentPoints" class="form-control" placeholder="Starting Points" required />
               </div>
               <div class="mb-3">
-                <input type="text" id="departmentNick" class="form-control" placeholder="Nickname (optional)">
+                <input type="text" id="departmentNick" class="form-control" placeholder="Nickname (optional)" />
               </div>
               <button type="submit" class="btn btn-success w-100">Add Department</button>
             </form>
@@ -56,17 +55,17 @@
         </div>
       </div>
 
-      <!-- Score Department Form -->
+      <!-- Score department -->
       <div class="col-md-6 mb-4">
         <div class="card shadow">
           <div class="card-body">
             <h5 class="card-title">Score Department</h5>
-            <form id="scoreForm">
+            <form id="scoreForm" aria-label="Score Department Form">
               <div class="mb-3">
-                <input type="text" id="scoreDeptName" class="form-control" placeholder="Department Name" required>
+                <input type="text" id="scoreDeptName" class="form-control" placeholder="Department Name" required />
               </div>
               <div class="mb-3">
-                <input type="number" id="scoreValue" class="form-control" placeholder="Score to Add" required>
+                <input type="number" id="scoreValue" class="form-control" placeholder="Score to Add" required />
               </div>
               <button type="submit" class="btn btn-warning w-100">Submit Score</button>
             </form>
@@ -75,16 +74,17 @@
       </div>
     </div>
 
-    <!-- Weekly Challenge Section -->
+    <!-- Weekly Challenge -->
     <div class="card shadow mb-4">
       <div class="card-body">
         <h5 class="card-title">Weekly Challenge</h5>
-        <form id="challengeForm">
+        <form id="challengeForm" aria-label="Set Weekly Challenge">
           <div class="mb-3">
-            <input type="text" id="weeklyChallenge" class="form-control" placeholder="Enter Weekly Challenge" required>
+            <input type="text" id="weeklyChallenge" class="form-control" placeholder="Enter Weekly Challenge" required />
           </div>
           <button type="submit" class="btn btn-info w-100">Set Challenge</button>
         </form>
+
         <div class="mt-4">
           <h6>Current Challenge:</h6>
           <p id="challengeDisplay">Loading...</p>
@@ -92,14 +92,21 @@
       </div>
     </div>
 
-    <!-- Leaderboard Display -->
+    <!-- Leaderboard -->
     <div class="card shadow mb-4">
       <div class="card-body">
         <h5 class="card-title">Leaderboard</h5>
-        <ul id="leaderboardList" class="list-group"></ul>
+        <ul id="leaderboardList" class="list-group" aria-label="Leaderboard List"></ul>
       </div>
     </div>
 
+    <!-- Report viewer (placeholder) -->
+    <div class="card shadow mb-5">
+      <div class="card-body">
+        <h5 class="card-title">Submitted Error Reports</h5>
+        <ul id="errorReportsList" class="list-group" aria-label="Error Report List"></ul>
+      </div>
+    </div>
   </div>
 
 </body>

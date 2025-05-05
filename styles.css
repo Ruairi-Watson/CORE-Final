@@ -1,19 +1,18 @@
 body {
-  font-family: "Times New Roman", Times, serif;
-  background-color: #f0f2f5;
-  color: #333;
-}
-
-.dark-mode {
-  background-color: #121212;
-  color: #f0f2f5;
-}
-
-.dark-mode .card {
-  background-color: #1e1e1e;
-  color: #f0f2f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  color: #212529;
 }
 
 .navbar {
   margin-bottom: 2rem;
+}
+
+h1, h2, h3, h5 {
+  font-weight: bold;
+  text-align: center;
+}
+
+.list-group-item {
+  font-size: 1.1rem;
 }

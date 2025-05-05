@@ -1,7 +1,4 @@
-/* global firebase */
-/* global emailjs */
-/* global location */
-
+// Firebase Confg
 const firebaseConfig = {
   apiKey: "AIzaSyCGW4_VqassdGCOJaGPkYLGYYvBs4QMcME",
   authDomain: "core-iii-web.firebaseapp.com",
@@ -11,15 +8,21 @@ const firebaseConfig = {
   appId: "1:22933808877:web:f8494e90f24ca75eaa0ee4",
   measurementId: "G-3R70JDVY01"
 };
+//global error  codes
+/* global firebase */
+/* global emailjs */
+/* global location */
+/* global localStorage */
 
+// Init Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-emailjs.init("gn6ldKkOG1-i58EOG");
+emailjs.init("gn6ldKkOG1-i58EOG"); // EmailJS public key
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Registration form
+  /** REGISTER COMPANY **/
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
@@ -27,15 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("registerEmail").value;
       const password = document.getElementById("registerPassword").value;
       const companyName = document.getElementById("companyName").value;
-      const companyCode = Math.random().toString(36).substr(2, 8).toUpperCase();
+      const companyCode = Math.random().toString(36).substring(2, 10).toUpperCase();
 
       auth.createUserWithEmailAndPassword(email, password)
-        .then((cred) => {
-          return db.collection("companies").doc(cred.user.uid).set({
-            companyName,
+        .then(cred => {
+          const companyData = {
             email,
-            companyCode
-          });
+            companyName,
+            companyCode,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          return db.collection("companies").doc(cred.user.uid).set(companyData);
         })
         .then(() => {
           return emailjs.send("service_nk46jxr", "template_4n630w9", {
@@ -45,17 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         })
         .then(() => {
-          alert("Registration successful! A company code has been sent to your email.");
+          alert("Registration successful! A company code has been emailed to you.");
           location.href = "admin.html";
         })
-        .catch((err) => {
-          console.error(err.message);
-          alert("Registration failed: " + err.message);
-        });
+        .catch(err => alert("Registration failed: " + err.message));
     });
   }
 
-  // Login form
+  /** ADMIN LOGIN **/
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
@@ -68,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const doc = await db.collection("companies").doc(cred.user.uid).get();
           if (!doc.exists) {
             await cred.user.delete();
-            alert("Company record missing. Account deleted.");
+            alert("Company record missing. Account removed.");
             return auth.signOut();
           }
           alert("Login successful!");
@@ -78,72 +80,221 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Main dashboard logic
+  /** EMPLOYEE DASHBOARD ACCESS **/
+  const employeeLoginForm = document.getElementById("employeeLoginForm");
+  if (employeeLoginForm) {
+    employeeLoginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const code = document.getElementById("companyCode").value.trim();
+      db.collection("companies").where("companyCode", "==", code).get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            alert("Invalid code.");
+          } else {
+            const companyId = snapshot.docs[0].id;
+            localStorage.setItem("employeeCompanyId", companyId);
+            location.href = "employee.html";
+          }
+        })
+        .catch(err => alert("Error: " + err.message));
+    });
+  }
+
+  /** EMPLOYEE DASHBOARD DATA LOAD **/
+  if (window.location.pathname.includes("employee-dashboard.html")) {
+    const cid = localStorage.getItem("employeeCompanyId");
+    if (!cid) return;
+
+    const display = document.getElementById("employeeChallengeDisplay");
+    db.collection("challenges").where("companyId", "==", cid).orderBy("createdAt", "desc").limit(1).get()
+      .then(snapshot => {
+        display.textContent = snapshot.empty
+          ? "No challenge set." : snapshot.docs[0].data().challenge;
+      });
+
+    const list = document.getElementById("employeeLeaderboardList");
+    db.collection("departments").where("companyId", "==", cid).orderBy("points", "desc").get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          list.innerHTML = "<li class='list-group-item'>No departments yet.</li>";
+        } else {
+          snapshot.forEach(doc => {
+            const d = doc.data();
+            let badgeSpan = "";
+            if (d.badges && d.badges.length) {
+              d.badges.forEach((b, i) => {
+                const title = (b === "gold" ? "⭐" : b === "trophy" ? "🏆" : b === "starter" ? "🔰" : b === "veteran" ? "💪" : b === "comeback" ? "📈" : "");
+                const tooltip = d.badgeDates?.[i] || "";
+                badgeSpan += ` <span title="${tooltip}">${title}</span>`;
+              });
+            }
+            list.innerHTML += `<li class='list-group-item'>${d.name} (${d.nickname || ""}) – ${d.points} pts ${badgeSpan}</li>`;
+          });
+        }
+      });
+  }
+
+  /** ADMIN DASHBOARD LOGIC **/
   auth.onAuthStateChanged((user) => {
     if (!user) return;
 
-    const leaderboardList = document.getElementById("leaderboardList");
-    if (leaderboardList) {
-      db.collection("departments")
-        .where("companyId", "==", user.uid)
-        .orderBy("points", "desc")
-        .onSnapshot((snapshot) => {
-          leaderboardList.innerHTML = "";
+    // Header name
+    db.collection("companies").doc(user.uid).get().then(doc => {
+      const head = document.getElementById("companyNameHeader");
+      if (doc.exists && head) head.textContent = `${doc.data().companyName} – Admin Dashboard`;
+    });
 
+    // Add department
+    const addForm = document.getElementById("addDepartmentForm");
+    if (addForm) {
+      addForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("departmentName").value;
+        const points = parseInt(document.getElementById("departmentPoints").value, 10);
+        const nick = document.getElementById("departmentNick")?.value || "";
+        db.collection("departments").add({
+          name, points, nickname: nick,
+          companyId: user.uid,
+          goldStreaks: 0,
+          badges: [],
+          badgeDates: []
+        }).then(() => location.reload());
+      });
+    }
+
+    // Score department
+    const scoreForm = document.getElementById("scoreForm");
+    if (scoreForm) {
+      scoreForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("scoreDeptName").value;
+        const score = parseInt(document.getElementById("scoreValue").value, 10);
+
+        db.collection("departments")
+          .where("companyId", "==", user.uid)
+          .where("name", "==", name)
+          .get()
+          .then(snapshot => {
+            if (snapshot.empty) return alert("Department not found.");
+            snapshot.forEach(doc => {
+              db.collection("departments").doc(doc.id).update({
+                points: firebase.firestore.FieldValue.increment(score)
+              });
+            });
+            alert("Points added.");
+            location.reload();
+          });
+      });
+    }
+
+    // Challenge form + load
+    const challengeForm = document.getElementById("challengeForm");
+    if (challengeForm) {
+      challengeForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const txt = document.getElementById("weeklyChallenge").value;
+        db.collection("challenges").add({
+          challenge: txt,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          companyId: user.uid
+        }).then(() => location.reload());
+      });
+
+      // load
+      db.collection("challenges").where("companyId", "==", user.uid).orderBy("createdAt", "desc").limit(1).get()
+        .then(snapshot => {
+          const display = document.getElementById("challengeDisplay");
           if (snapshot.empty) {
-            leaderboardList.innerHTML = "<li class='list-group-item'>No departments yet.</li>";
-            return;
-          }
-
-          const docs = snapshot.docs;
-          for (let doc of docs) {
-            const data = doc.data();
-
-            // Exclude HR or Management
-            const lowerName = data.name.trim().toLowerCase();
-            if (["hr", "human relations", "management", "upper managment", "middle managment"].includes(lowerName)) continue;
-
-            const li = document.createElement("li");
-
-            // Emoji avatar based on department name
-            const emoji = {
-              "sales": "💼",
-              "engineering": "🔧",
-              "marketing": "🎯",
-              "research": "🔬"
-            }[lowerName] || "🏢";
-
-            const name = data.name;
-            const nick = data.nickname ? ` (${data.nickname})` : "";
-            const pts = data.points;
-
-            // Badge logic
-            const badgeIcons = [];
-            const badgeTitles = [];
-
-            if (pts >= 50) {
-              badgeIcons.push("⭐");
-              badgeTitles.push("Starter - 50pts");
-            }
-            if (pts >= 100) {
-              badgeIcons.push("🌟");
-              badgeTitles.push("Veteran - 100pts");
-            }
-            if (data.lastGain && data.lastGain >= 30) {
-              badgeIcons.push("🔥");
-              badgeTitles.push("Comeback - Gained 30+pts");
-            }
-
-            const badgeHTML = badgeIcons.map((icon, i) => {
-              return ` <span title="${badgeTitles[i]}">${icon}</span>`;
-            }).join("");
-
-            li.className = "list-group-item";
-            li.innerHTML = `${emoji} ${name}${nick} - ${pts} Points ${badgeHTML}`;
-            leaderboardList.appendChild(li);
+            display.textContent = "No challenge set.";
+          } else {
+            const c = snapshot.docs[0];
+            const t = c.data().challenge;
+            display.innerHTML = `
+              <strong>${t}</strong>
+              <button onclick="editChallenge('${c.id}', '${t}')" class="btn btn-sm btn-outline-secondary ms-2">Edit</button>
+              <button onclick="deleteChallenge('${c.id}')" class="btn btn-sm btn-outline-danger ms-1">Delete</button>
+            `;
           }
         });
     }
-  });
 
+    window.editChallenge = function (id, current) {
+      const updated = prompt("Edit challenge:", current);
+      if (updated) {
+        db.collection("challenges").doc(id).update({ challenge: updated }).then(() => location.reload());
+      }
+    };
+
+    window.deleteChallenge = function (id) {
+      if (confirm("Delete challenge?")) {
+        db.collection("challenges").doc(id).delete().then(() => location.reload());
+      }
+    };
+
+    // Leaderboard + badge logic
+    const leaderboardList = document.getElementById("leaderboardList");
+    if (leaderboardList) {
+      db.collection("departments").where("companyId", "==", user.uid).orderBy("points", "desc").onSnapshot(snapshot => {
+        leaderboardList.innerHTML = "";
+
+        if (snapshot.empty) {
+          leaderboardList.innerHTML = "<li class='list-group-item'>No departments yet.</li>";
+          return;
+        }
+
+        const docs = snapshot.docs;
+        const top = docs[0];
+
+        db.collection("departments").doc(top.id).get().then(async (doc) => {
+          const data = doc.data();
+          const now = new Date().toISOString().split("T")[0];
+          const badges = data.badges || [];
+          const dates = data.badgeDates || [];
+
+          if (!badges.includes("gold")) {
+            badges.push("gold");
+            dates.push(now);
+          }
+
+          const newStreak = (data.goldStreaks || 0) + 1;
+          await db.collection("departments").doc(top.id).update({ goldStreaks: newStreak });
+
+          if (newStreak >= 3 && !badges.includes("trophy")) {
+            badges.push("trophy");
+            dates.push(now);
+          }
+
+          await db.collection("departments").doc(top.id).update({
+            badges,
+            badgeDates: dates
+          });
+        });
+
+        docs.forEach(doc => {
+          const d = doc.data();
+          const name = d.name;
+          const nick = d.nickname || "";
+          const pts = d.points;
+          const badges = d.badges || [];
+          const dates = d.badgeDates || [];
+
+          let badgeHTML = "";
+          badges.forEach((b, i) => {
+            const title = b === "gold" ? "⭐" : b === "trophy" ? "🏆" : "";
+            badgeHTML += ` <span title="${dates[i] || ''}">${title}</span>`;
+          });
+
+          leaderboardList.innerHTML += `<li class='list-group-item'>${name} (${nick}) – ${pts} pts ${badgeHTML}</li>`;
+        });
+      });
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        auth.signOut().then(() => location.href = "index-landing-page.html");
+      });
+    }
+  });
 });
