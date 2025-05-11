@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Dashboard – CORE</title>
+  <!-- Ensures layout adapts to screen size -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Shared stylesheet for styling -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header containing page title and nav -->
+  <header role="banner">
+    <h1>Employee Dashboard – CORE</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <!-- Highlight current page -->
+        <li><a href="employee-dashboard.html" aria-current="page">Dashboard</a></li>
+        <li><a href="report-error.html">Report Issue</a></li>
+        <!-- Logout button (handled in JS) -->
+        <li><button id="logoutBtn" aria-label="Logout of employee dashboard">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main role="main">
+    <!-- Challenge list area -->
+    <section aria-labelledby="your-challenges-header">
+      <h2 id="your-challenges-header">Your Current Challenges</h2>
+
+      <!-- Unordered list that gets filled by JavaScript -->
+      <ul id="employeeChallenges" role="list" aria-live="polite">
+        <!-- Populated dynamically from Firestore -->
+      </ul>
+    </section>
+
+    <!-- Leaderboard table -->
+    <section aria-labelledby="leaderboard-section">
+      <h2 id="leaderboard-section">Live Leaderboard</h2>
+
+      <!-- Accessible table showing department scores -->
+      <table id="leaderboard" role="table" aria-label="Department leaderboard">
+        <thead>
+          <tr>
+            <th scope="col">Department</th>
+            <th scope="col">Score</th>
+            <th scope="col">Badges</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Real-time content inserted here via app.js -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer for branding info -->
+  <footer role="contentinfo">
+    <p>CORE Productivity Platform &copy; 2025</p>
+  </footer>
+
+  <!-- Core app logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

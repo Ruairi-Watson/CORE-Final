@@ -1,18 +1,133 @@
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
-  color: #212529;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f9f9f9;
+  color: #222;
+  line-height: 1.6;
 }
 
-.navbar {
+/* Header and navbar */
+header {
+  background-color: #222;
+  color: #fff;
+  padding: 1rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+/* Nav links and buttons */
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+nav li {
+  display: inline;
+}
+
+nav a,
+nav button {
+  color: #fff;
+  background: none;
+  border: none;
+  text-decoration: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+nav a:hover,
+nav button:hover {
+  text-decoration: underline;
+}
+
+/* Main body section styling */
+main {
+  padding: 2rem;
+}
+
+/* Section headers */
+h2 {
+  color: #333;
+}
+
+/* Section blocks */
+section {
   margin-bottom: 2rem;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2, h3, h5 {
-  font-weight: bold;
+/* Form layout */
+label {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+input,
+textarea,
+button {
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Button styling */
+button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+/* Leaderboard table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+/* Footer */
+footer {
+  background-color: #222;
+  color: white;
   text-align: center;
+  padding: 1rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
-.list-group-item {
-  font-size: 1.1rem;
+/* Challenge clickable list items */
+[role="button"] {
+  cursor: pointer;
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+[role="button"]:hover {
+  background-color: #ddd;
 }

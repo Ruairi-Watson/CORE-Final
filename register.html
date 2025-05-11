@@ -1,74 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta tags for responsiveness -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Register Company | CORE</title>
-
-  <!-- Bootstrap CSS for layout and components -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Register – CORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Header with platform name and navigation -->
+  <header role="banner">
+    <h1>Register for CORE</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index-landing-page.html">Home</a></li>
+        <li><a href="employee-login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Navigation bar with return to homepage -->
-  <nav class="navbar navbar-dark bg-success px-3 d-flex justify-content-between" role="navigation">
-    <span class="navbar-brand mb-0 h1">Register Company</span>
-    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm" role="link">Return to Home</a>
-  </nav>
+  <!-- Registration form -->
+  <main role="main">
+    <section aria-labelledby="reg-header">
+      <h2 id="reg-header">Create Your Account</h2>
 
-  <!-- Main content container -->
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-5">
-        <!-- Registration form card -->
-        <div class="card shadow" role="form">
-          <div class="card-body">
-            <h2 class="card-title text-center mb-4">Register Company</h2>
+      <!-- Form collects account details -->
+      <form id="registerForm" aria-label="Registration form">
+        <!-- Email address -->
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" required />
 
-            <!-- Company registration form -->
-            <form id="registerForm" aria-label="Company registration form">
-              <!-- Company Name input -->
-              <div class="mb-3">
-                <label for="companyName" class="form-label">Company Name</label>
-                <input type="text" id="companyName" class="form-control" placeholder="e.g. SkyTech Solutions" required>
-              </div>
+        <!-- Password -->
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" required />
 
-              <!-- Admin Email input -->
-              <div class="mb-3">
-                <label for="registerEmail" class="form-label">Admin Email</label>
-                <input type="email" id="registerEmail" class="form-control" placeholder="e.g. admin@example.com" required>
-              </div>
+        <!-- Company code (provided via admin or email invite) -->
+        <label for="regCompanyCode">Company Code</label>
+        <input type="text" id="regCompanyCode" required />
 
-              <!-- Admin Password input -->
-              <div class="mb-3">
-                <label for="registerPassword" class="form-label">Password</label>
-                <input type="password" id="registerPassword" class="form-control" placeholder="Choose a secure password" required>
-              </div>
+        <!-- Department user is joining -->
+        <label for="regDepartment">Department</label>
+        <input type="text" id="regDepartment" required />
 
-              <!-- Submit button -->
-              <button type="submit" class="btn btn-success w-100" aria-label="Register company account">Register</button>
-            </form>
+        <!-- Select role (admin vs employee) -->
+        <label for="regRole">Role</label>
+        <select id="regRole" required>
+          <option value="employee">Employee</option>
+          <option value="admin">Admin</option>
+        </select>
 
-            <!-- Redirect to login -->
-            <p class="text-center mt-3">
-              Already Registered? <a href="index-login.html">Login Here</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <!-- Submit button -->
+        <button type="submit">Register</button>
+      </form>
+    </section>
+  </main>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Footer content -->
+  <footer role="contentinfo">
+    <p>CORE Productivity Platform &copy; 2025</p>
+  </footer>
 
-  <!-- App logic -->
-  <script src="app.js" defer></script>
-
+  <!-- Include app logic -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>

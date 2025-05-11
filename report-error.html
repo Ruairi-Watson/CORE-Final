@@ -1,66 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Metadata -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Report an Error | CORE</title>
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Report an Issue – CORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Include shared CSS -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Header with navigation for both roles -->
+  <header role="banner">
+    <h1>Report an Issue</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="admin.html">Admin Dashboard</a></li>
+        <li><a href="employee-dashboard.html">Employee Dashboard</a></li>
+        <li><a href="report-error.html" aria-current="page">Report Issue</a></li>
+        <li><button id="logoutBtn" aria-label="Logout from platform">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Top Navbar -->
-  <nav class="navbar navbar-dark bg-danger px-3 d-flex justify-content-between">
-    <span class="navbar-brand mb-0 h1">Report an Issue</span>
-    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm">Return to Home</a>
-  </nav>
+  <main role="main">
+    <!-- Support ticket form -->
+    <section aria-labelledby="error-form-header">
+      <h2 id="error-form-header">Submit an Error Report</h2>
 
-  <!-- Main report form -->
-  <div class="container mt-5">
-    <h1 class="mb-4 text-center">Tell us what went wrong</h1>
+      <form id="errorForm" aria-label="Error reporting form">
+        <!-- Optional user email (for follow-up) -->
+        <label for="userEmail">Your Email (optional)</label>
+        <input type="email" id="userEmail" placeholder="you@company.com" aria-describedby="emailHelp" />
 
-    <!-- Issue report form using FormSubmit -->
-    <form action="https://formsubmit.co/CORE-ticket@protonmail.com" method="POST" class="needs-validation" novalidate aria-label="Report an Issue Form">
+        <!-- Required issue description -->
+        <label for="errorDesc">Describe the issue</label>
+        <textarea id="errorDesc" rows="5" required aria-required="true"></textarea>
 
-      <!-- Optional contact email -->
-      <div class="mb-3">
-        <label for="userEmail" class="form-label">Your Email (optional)</label>
-        <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="you@example.com" aria-describedby="optionalEmail" />
-        <div id="optionalEmail" class="form-text">We'll use this only if follow-up is needed.</div>
-      </div>
+        <!-- EmailJS sends form content -->
+        <button type="submit" aria-label="Send this issue report to admin">Send Report</button>
+      </form>
+    </section>
+  </main>
 
-      <!-- Required error message -->
-      <div class="mb-3">
-        <label for="errorText" class="form-label">Describe the problem</label>
-        <textarea id="errorText" name="issue" class="form-control" rows="6" required aria-required="true" aria-label="Describe the issue you're experiencing"></textarea>
-        <div class="invalid-feedback">Please describe the issue.</div>
-      </div>
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <p>CORE Productivity Platform &copy; 2025</p>
+  </footer>
 
-      <!-- Hidden config for FormSubmit -->
-      <input type="hidden" name="_subject" value="CORE Error Report" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_next" value="index-landing-page.html" />
-
-      <!-- Submit -->
-      <button type="submit" class="btn btn-danger w-100">Send Report</button>
-    </form>
-
-    <!-- Footer note -->
-    <p class="text-muted mt-3 text-center">Report will be emailed to <strong>CORE-ticket@protonmail.com</strong></p>
-  </div>
-
-  <!-- Bootstrap JS form validation -->
-  <script>
-    document.querySelector('form').addEventListener('submit', function (event) {
-      if (!this.checkValidity()) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      this.classList.add('was-validated');
-    });
-  </script>
-
+  <!-- Firebase/EmailJS functionality -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>

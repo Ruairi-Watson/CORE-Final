@@ -1,65 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic metadata -->
   <meta charset="UTF-8" />
+  <!-- Make page scale properly on all screen sizes -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CORE | Collaborative Optimisation</title>
-
-  <!-- Load Bootstrap CSS from CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <!-- Custom inline styling for layout and visual polish -->
-  <style>
-    body {
-      background: linear-gradient(to right, #f8f9fa, #e0eafc); /* soft gradient bg */
-      min-height: 100vh;
-    }
-    .hero {
-      height: 90vh; /* almost full viewport height */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      flex-direction: column;
-    }
-    .btn-group-lg .btn {
-      min-width: 180px; /* keep buttons wide and uniform */
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      color: #666;
-    }
-  </style>
+  <title>Welcome to CORE</title>
+  <!-- Link to shared CSS for consistent layout -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Page header: shows main title and navigation -->
+  <header role="banner">
+    <h1>Welcome to CORE Productivity Platform</h1>
+    <!-- Navigation links for user access -->
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="employee-login.html">Employee Login</a></li>
+        <li><a href="admin.html">Admin Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Main hero content section -->
-  <div class="hero container">
-    <h1 class="display-4 fw-bold mb-3">Welcome to CORE</h1>
-    <p class="lead mb-4">Collaborative Optimisation for Results and Engagement</p>
+  <!-- Main content of the landing page -->
+  <main role="main">
+    <section aria-labelledby="intro-header">
+      <h2 id="intro-header">What is CORE?</h2>
+      <p>
+        CORE is a gamified productivity platform built for remote and hybrid workplaces.
+        It rewards departmental collaboration instead of individual competition.
+      </p>
+    </section>
 
-    <!-- Button group for navigation actions -->
-    <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mb-3">
-      <!-- Link to admin login -->
-      <a href="index-login.html" class="btn btn-primary btn-lg">Admin Login</a>
+    <section aria-labelledby="features-header">
+      <h2 id="features-header">Platform Features</h2>
+      <ul>
+        <li>Department-based scoring challenges</li>
+        <li>Real-time leaderboards</li>
+        <li>Streak badges and milestone stickers</li>
+        <li>Accessibility-first interface design</li>
+        <li>Cloud-hosted, no install required</li>
+      </ul>
+    </section>
+  </main>
 
-      <!-- Link to company registration -->
-      <a href="register.html" class="btn btn-success btn-lg">Register Company</a>
-
-      <!-- Link to employee login page -->
-      <a href="employee-login.html" class="btn btn-secondary btn-lg">Employee Access</a>
-    </div>
-
-    <!-- Small report button below main actions -->
-    <a href="report-error.html" class="btn btn-outline-danger btn-sm mt-3">Report a Problem</a>
-  </div>
-
-  <!-- Footer text -->
-  <footer>
-    &copy; CORE Project | Empowering Team Productivity
+  <!-- Footer content (small print, copyright) -->
+  <footer role="contentinfo">
+    <p>CORE Productivity Platform &copy; 2025</p>
   </footer>
-
 </body>
 </html>
