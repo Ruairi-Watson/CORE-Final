@@ -12,13 +12,13 @@
 <body>
 
   <!-- Top Navbar -->
-  <nav class="navbar navbar-dark bg-danger px-3 d-flex justify-content-between">
+  <nav class="navbar navbar-dark bg-danger px-3 d-flex justify-content-between" role="navigation">
     <span class="navbar-brand mb-0 h1">Report an Issue</span>
-    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm">Return to Home</a>
+    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm" role="link">Return to Home</a>
   </nav>
 
   <!-- Main report form -->
-  <div class="container mt-5">
+  <main class="container mt-5" role="main">
     <h1 class="mb-4 text-center">Tell us what went wrong</h1>
 
     <!-- Issue report form using FormSubmit -->
@@ -49,9 +49,9 @@
 
     <!-- Footer note -->
     <p class="text-muted mt-3 text-center">Report will be emailed to <strong>CORE-ticket@protonmail.com</strong></p>
-  </div>
+  </main>
 
-  <!-- Bootstrap JS form validation -->
+  <!-- Bootstrap JS validation -->
   <script>
     document.querySelector('form').addEventListener('submit', function (event) {
       if (!this.checkValidity()) {
@@ -64,3 +64,4 @@
 
 </body>
 </html>
+
