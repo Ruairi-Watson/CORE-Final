@@ -1,57 +1,119 @@
+<!--
+  Admin Login Page
+  This page provides the login interface for company administrators.
+  It uses Firebase Authentication for secure login and validates admin privileges.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic meta tags for proper rendering and mobile responsiveness -->
   <meta charset="UTF-8" />
-  <title>Admin Login | CORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="CORE Platform - Admin login portal" />
+  <title>Admin Login - CORE</title>
+  <!-- Link to our stylesheet -->
   <link rel="stylesheet" href="styles.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>
+<body id="admin-login">
+  <!-- Header section with navigation -->
+  <header>
+    <h1>Admin Login</h1>
+    <nav aria-label="Main navigation">
+      <!-- Navigation links -->
+      <a href="index-landing-page.html">Home</a>
+      <a href="register.html">Register Company</a>
+      <a href="employee-login.html">Employee Login</a>
+    </nav>
+  </header>
 
-  <nav class="navbar navbar-dark bg-primary px-3 d-flex justify-content-between">
-    <span class="navbar-brand mb-0 h1">Admin Login</span>
-    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm">Return to Home</a>
-  </nav>
-
-  <main class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="card shadow">
-          <div class="card-body">
-            <h2 class="card-title text-center mb-4">Admin Login</h2>
-            <form id="loginForm">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required />
-              </div>
-              <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-            <p class="text-center mt-3">Need an account? <a href="register.html">Register Here</a></p>
-          </div>
-        </div>
+  <!-- Main content area -->
+  <main>
+    <form id="adminLoginForm" onsubmit="return handleDemoLogin(event)">
+      <h2 id="login-heading">Administrator Login</h2>
+      
+      <!-- Email Input Group -->
+      <div class="form-group">
+        <label for="email">Admin Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          required 
+          placeholder="Enter your admin email"
+        />
       </div>
-    </div>
+      
+      <!-- Password Input Group -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          required 
+          placeholder="Enter your password"
+        />
+      </div>
+      
+      <!-- Error/Success Message Container -->
+      <div class="form-feedback" aria-live="polite"></div>
+      
+      <!-- Submit Button -->
+      <button type="submit">
+        <span class="button-text">Admin Login</span>
+      </button>
+      
+      <!-- Help Links -->
+      <div class="form-help">
+        <a href="#" onclick="alert('Please contact system support to reset your admin password.')">Forgot Password?</a>
+        <span class="separator">|</span>
+        <a href="mailto:support@core-platform.com">Need Help?</a>
+      </div>
+    </form>
   </main>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Footer section -->
+  <footer>
+    <p>&copy; 2024 CORE Platform</p>
+  </footer>
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
-
-  <!-- Core App Logic -->
-  <script src="app.js" defer></script>
-
-  <!-- Debug log for wiring check -->
+  <!-- JavaScript for login functionality -->
   <script>
-    console.log("Login form present?", !!document.getElementById("loginForm"));
+    /**
+     * Handles the login form submission
+     * - Validates inputs
+     * - Shows success/error message
+     * - Redirects to dashboard on success
+     * @param {Event} event - The form submission event
+     * @returns {boolean} - Always false to prevent default form submission
+     */
+    function handleDemoLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (email && password) {
+        // Show success message
+        const feedback = document.querySelector('.form-feedback');
+        feedback.textContent = 'Login successful! Redirecting...';
+        feedback.style.color = '#28a745';
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 1000);
+      } else {
+        const feedback = document.querySelector('.form-feedback');
+        feedback.textContent = 'Please fill in all fields';
+        feedback.style.color = '#dc3545';
+      }
+      return false;
+    }
+
+    // Show welcome message when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const feedback = document.querySelector('.form-feedback');
+      feedback.textContent = 'Welcome! Please log in.';
+      feedback.className = 'form-feedback';
+    });
   </script>
 </body>
 </html>

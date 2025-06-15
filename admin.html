@@ -1,83 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin Dashboard | CORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Page metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CORE Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* Dashboard layout */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Statistics cards */
+        .stat-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            margin: 0;
+            color: #666;
+        }
+        .stat-card p {
+            margin: 10px 0 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Search functionality */
+        .search-box {
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Point history display */
+        .point-history {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        /* Challenge list styling */
+        .challenges-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .challenge-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .challenge-info {
+            flex-grow: 1;
+        }
+
+        .challenge-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .challenge-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .challenge-meta {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        /* Delete button styling */
+        .delete-challenge {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-challenge:hover {
+            background: #cc0000;
+        }
+
+        /* Action button styles */
+        .warning-button {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+
+        .warning-button:hover {
+            background-color: #c82333 !important;
+        }
+
+        .success-button {
+            background-color: #28a745 !important;
+            color: white !important;
+        }
+
+        .success-button:hover {
+            background-color: #218838 !important;
+        }
+
+        /* Form elements */
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
 </head>
-<body>
+<body id="admin-dashboard">
+    <!-- Navigation -->
+    <header>
+        <h1>CORE Admin Dashboard</h1>
+        <nav>
+            <button onclick="window.location.href='index-landing-page.html'" class="logout-button">Logout</button>
+        </nav>
+    </header>
 
-  <nav class="navbar navbar-dark bg-dark px-3 d-flex justify-content-between">
-    <span class="navbar-brand mb-0 h1" id="companyNameHeader">Admin Dashboard</span>
-    <button class="btn btn-outline-light btn-sm" id="logoutBtn">Logout</button>
-  </nav>
+    <main>
+        <!-- Statistics section -->
+        <section class="dashboard-section">
+            <h2>Dashboard Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Departments</h3>
+                    <p id="totalDepts">5</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Points</h3>
+                    <p id="totalPoints">2880</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Top Score</h3>
+                    <p id="topScore">750</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Score</h3>
+                    <p id="avgScore">576</p>
+                </div>
+            </div>
+        </section>
 
-  <main class="container mt-4">
-    <!-- Add Department -->
-    <section class="mb-4">
-      <h3>Add Department</h3>
-      <form id="addDepartmentForm" class="row g-3">
-        <div class="col-md-4">
-          <input type="text" id="departmentName" class="form-control" placeholder="Department Name" required />
-        </div>
-        <div class="col-md-3">
-          <input type="number" id="departmentPoints" class="form-control" placeholder="Starting Points" required />
-        </div>
-        <div class="col-md-3">
-          <input type="text" id="departmentNick" class="form-control" placeholder="Nickname (optional)" />
-        </div>
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-success w-100">Add</button>
-        </div>
-      </form>
-    </section>
+        <!-- Points management -->
+        <section class="dashboard-section">
+            <h2>Manage Department Points</h2>
+            <div class="form-group">
+                <label for="scoreDeptName">Department Name</label>
+                <input type="text" id="scoreDeptName" placeholder="e.g., Logistics" />
+                <label for="scorePoints">Points</label>
+                <input type="number" id="scorePoints" placeholder="e.g., 50" />
+                <label for="pointAction">Action</label>
+                <select id="pointAction">
+                    <option value="add">Add Points</option>
+                    <option value="deduct">Deduct Points</option>
+                </select>
+                <button onclick="managePoints()">Submit</button>
+            </div>
+        </section>
 
-    <!-- Score Department -->
-    <section class="mb-4">
-      <h3>Score Department</h3>
-      <form id="scoreForm" class="row g-3">
-        <div class="col-md-6">
-          <input type="text" id="scoreDeptName" class="form-control" placeholder="Department Name" required />
-        </div>
-        <div class="col-md-4">
-          <input type="number" id="scoreValue" class="form-control" placeholder="Points to Add" required />
-        </div>
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-warning w-100">Score</button>
-        </div>
-      </form>
-    </section>
+        <!-- Leaderboard section -->
+        <section class="dashboard-section">
+            <h2>Department Leaderboard</h2>
+            <div class="search-box">
+                <input type="text" id="deptSearch" placeholder="Search departments..." onkeyup="filterDepartments()">
+            </div>
+            <ul id="leaderboardList" class="leaderboard">
+                <li>🥇 Marketing: 750 points <span>🏆 ⭐ 🔥</span></li>
+                <li>🥈 Sales: 680 points <span>⭐ 🔥</span></li>
+                <li>🥉 Engineering: 620 points <span>⭐</span></li>
+                <li>Operations: 450 points</li>
+                <li>Customer Support: 380 points</li>
+            </ul>
+            <!-- Achievement legend -->
+            <div class="emoji-legend" style="margin-top: 20px; font-size: 0.9em;">
+                <h3>Achievement Symbols:</h3>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>🥇 🥈 🥉 - Top 3 Rankings</li>
+                    <li>🏆 - Department of the Month</li>
+                    <li>⭐ - Achieved Monthly Goal</li>
+                    <li>🔥 - On a Winning Streak</li>
+                </ul>
+            </div>
+            <!-- Point history -->
+            <div class="point-history">
+                <h3>Recent Point Changes</h3>
+                <ul id="pointHistory"></ul>
+            </div>
+        </section>
 
-    <!-- Challenge Control -->
-    <section class="mb-4">
-      <h3>Current Challenge</h3>
-      <form id="challengeForm" class="mb-3">
-        <div class="input-group">
-          <input type="text" id="weeklyChallenge" class="form-control" placeholder="Enter new challenge" required />
-          <button type="submit" class="btn btn-info">Set</button>
-        </div>
-      </form>
-      <div id="challengeDisplay" class="alert alert-secondary">Loading latest challenge...</div>
-    </section>
+        <!-- Challenges section -->
+        <section class="dashboard-section">
+            <h2>Weekly Challenges</h2>
+            <div class="form-group">
+                <label for="challengeTitle">Challenge Title</label>
+                <input type="text" id="challengeTitle" placeholder="e.g., Customer Service Excellence" />
+                
+                <label for="challengeDescription">Description</label>
+                <textarea id="challengeDescription" placeholder="Describe the challenge requirements..."></textarea>
+                
+                <label for="challengePoints">Reward Points</label>
+                <input type="number" id="challengePoints" placeholder="e.g., 100" />
+                
+                <label for="challengeDeadline">Deadline</label>
+                <input type="date" id="challengeDeadline" />
+                
+                <button onclick="createChallenge()">Create Challenge</button>
+            </div>
 
-    <!-- Leaderboard -->
-    <section>
-      <h3>Department Leaderboard</h3>
-      <ul id="leaderboardList" class="list-group"></ul>
-    </section>
-  </main>
+            <div class="active-challenges">
+                <h3>Active Challenges</h3>
+                <ul id="challengesList" class="challenges-list">
+                    <!-- Dynamic challenge list -->
+                </ul>
+            </div>
+        </section>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+        <!-- Quick actions -->
+        <section class="dashboard-section">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions">
+                <button onclick="showMessage('Notifications sent to all department heads!')">Send Notifications</button>
+                <button onclick="resetAllData()" class="warning-button">Reset All Data</button>
+                <button onclick="submitDemoData()" class="success-button">Load Demo Data</button>
+            </div>
+        </section>
 
-  <!-- FIXED: Include EmailJS to prevent ReferenceError -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
+        <!-- Message display -->
+        <div id="message" class="form-feedback" style="display: none;"></div>
+    </main>
 
-  <!-- Main App Logic -->
-  <script src="app.js" defer></script>
+    <footer>&copy; 2025 CORE Platform</footer>
+
+    <script>
+        // Manage department points
+        function managePoints() {
+            const deptName = document.getElementById('scoreDeptName').value.trim();
+            const points = document.getElementById('scorePoints').value;
+            const action = document.getElementById('pointAction').value;
+            
+            if (!deptName || !points) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString();
+            const historyEntry = document.createElement('li');
+            historyEntry.textContent = `${timestamp} - ${action === 'add' ? 'Added' : 'Deducted'} ${points} points ${action === 'add' ? 'to' : 'from'} ${deptName}`;
+            
+            document.getElementById('pointHistory').insertBefore(historyEntry, document.getElementById('pointHistory').firstChild);
+            
+            showMessage(`Successfully ${action === 'add' ? 'added' : 'deducted'} ${points} points ${action === 'add' ? 'to' : 'from'} ${deptName}!`, 'success');
+            
+            document.getElementById('scoreDeptName').value = '';
+            document.getElementById('scorePoints').value = '';
+        }
+
+        // Filter departments in leaderboard
+        function filterDepartments() {
+            const searchText = document.getElementById('deptSearch').value.toLowerCase();
+            const items = document.getElementById('leaderboardList').getElementsByTagName('li');
+            
+            for (let item of items) {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchText) ? '' : 'none';
+            }
+        }
+
+        // Display user messages
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `form-feedback ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Reset leaderboard data
+        function resetLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '';
+            document.getElementById('pointHistory').innerHTML = '';
+            updateStats();
+            showMessage('Leaderboard scores have been reset.');
+        }
+
+        // Update dashboard statistics
+        function updateStats() {
+            document.getElementById('totalDepts').textContent = '0';
+            document.getElementById('totalPoints').textContent = '0';
+            document.getElementById('topScore').textContent = '0';
+            document.getElementById('avgScore').textContent = '0';
+        }
+
+        // Store challenges in localStorage
+        function storeChallenges(challenges) {
+            localStorage.setItem('coreChallenges', JSON.stringify(challenges));
+        }
+
+        // Retrieve challenges from localStorage
+        function getChallenges() {
+            const challenges = localStorage.getItem('coreChallenges');
+            return challenges ? JSON.parse(challenges) : [];
+        }
+
+        // Create new challenge
+        function createChallenge() {
+            const title = document.getElementById('challengeTitle').value.trim();
+            const description = document.getElementById('challengeDescription').value.trim();
+            const points = document.getElementById('challengePoints').value;
+            const deadline = document.getElementById('challengeDeadline').value;
+
+            if (!title || !description || !points || !deadline) {
+                showMessage('Please fill in all challenge fields', 'error');
+                return;
+            }
+
+            const challenge = {
+                id: Date.now(),
+                title,
+                description,
+                points: parseInt(points),
+                deadline,
+                createdAt: new Date().toISOString(),
+                status: 'active',
+                progress: 0,
+                participants: []
+            };
+
+            const challenges = getChallenges();
+            challenges.push(challenge);
+            storeChallenges(challenges);
+
+            displayChallenge(challenge);
+            
+            document.getElementById('challengeTitle').value = '';
+            document.getElementById('challengeDescription').value = '';
+            document.getElementById('challengePoints').value = '';
+            document.getElementById('challengeDeadline').value = '';
+            
+            showMessage('New challenge created successfully!', 'success');
+        }
+
+        // Display challenge in UI
+        function displayChallenge(challenge) {
+            const challengesList = document.getElementById('challengesList');
+            const challengeItem = document.createElement('li');
+            challengeItem.className = 'challenge-item';
+            challengeItem.dataset.id = challenge.id;
+            
+            const formattedDate = new Date(challenge.deadline).toLocaleDateString();
+            
+            challengeItem.innerHTML = `
+                <div class="challenge-info">
+                    <div class="challenge-title">${challenge.title}</div>
+                    <div class="challenge-description">${challenge.description}</div>
+                    <div class="challenge-meta">
+                        🎯 ${challenge.points} points | 📅 Due: ${formattedDate}
+                    </div>
+                </div>
+                <button class="delete-challenge" onclick="deleteChallenge(${challenge.id})">Delete</button>
+            `;
+
+            challengesList.appendChild(challengeItem);
+        }
+
+        // Delete challenge
+        function deleteChallenge(challengeId) {
+            let challenges = getChallenges();
+            challenges = challenges.filter(c => c.id !== challengeId);
+            storeChallenges(challenges);
+            
+            const challengeItem = document.querySelector(`li[data-id="${challengeId}"]`);
+            if (challengeItem) {
+                const challengeTitle = challengeItem.querySelector('.challenge-title').textContent;
+                challengeItem.remove();
+                showMessage(`Challenge "${challengeTitle}" has been deleted.`, 'success');
+            }
+        }
+
+        // Load all challenges
+        function loadChallenges() {
+            const challenges = getChallenges();
+            const challengesList = document.getElementById('challengesList');
+            challengesList.innerHTML = '';
+            
+            challenges.forEach(challenge => {
+                displayChallenge(challenge);
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChallenges();
+            setTimeout(() => {
+                showMessage('Welcome back, Admin! 👋');
+            }, 1000);
+        });
+    </script>
 </body>
 </html>

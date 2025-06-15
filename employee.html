@@ -1,53 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Metadata -->
+  <!-- Basic meta tags for proper rendering and mobile responsiveness -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Employee Dashboard | CORE</title>
-
-  <!-- Bootstrap and optional styles -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CORE Employee Dashboard</title>
+  <!-- Link to our stylesheet -->
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .challenges-container {
+      display: grid;
+      gap: 20px;
+      margin-top: 20px;
+    }
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    .challenge-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-  <!-- App logic -->
-  <script src="app.js" defer></script>
+    .challenge-card h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .challenge-description {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .progress-bar {
+      background: #f0f0f0;
+      border-radius: 10px;
+      height: 20px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress {
+      background: #4CAF50;
+      color: white;
+      text-align: center;
+      line-height: 20px;
+      transition: width 0.3s ease;
+    }
+
+    .challenge-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .challenge-progress {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+
+    .update-progress {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .update-progress:hover {
+      background: #45a049;
+    }
+
+    .progress-input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .sample-badge {
+      font-size: 0.7em;
+      background: #f0f0f0;
+      color: #666;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+  </style>
 </head>
-<body>
+<body id="employee-dashboard">
+  <!-- Header section with navigation -->
+  <header>
+    <h1>CORE Employee Dashboard</h1>
+    <nav>
+      <!-- Simple logout that redirects to landing page -->
+      <button onclick="window.location.href='index-landing-page.html'" class="logout-button">Logout</button>
+    </nav>
+  </header>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark px-3 d-flex justify-content-between">
-    <span class="navbar-brand mb-0 h1">Employee Dashboard</span>
-    <a href="index-landing-page.html" class="btn btn-outline-light btn-sm">Home</a>
-  </nav>
-
-  <div class="container mt-4">
-
-    <!-- Company Header -->
-    <h2 id="employeeCompanyHeader" class="text-center mb-4">Welcome</h2>
-
-    <!-- Current Challenge -->
-    <div class="card shadow mb-4">
-      <div class="card-body">
-        <h5 class="card-title">This Week's Challenge</h5>
-        <p id="employeeChallengeDisplay" aria-live="polite">Loading challenge...</p>
+  <!-- Main content area -->
+  <main>
+    <!-- Current Challenge Section -->
+    <section class="dashboard-section">
+      <h2>Active Challenges <span class="sample-badge">Sample Data</span></h2>
+      <div id="challengesList" class="challenges-container">
+        <!-- Example challenge card -->
+        <div class="challenge-card">
+          <h3>Weekly Team Challenge</h3>
+          <p class="challenge-description">Complete 50 customer support tickets as a team</p>
+          <div class="progress-bar">
+            <div class="progress" style="width: 75%;">75%</div>
+          </div>
+          <div class="challenge-meta">
+            <p class="challenge-info">🎯 100 points | 📅 Due: Mar 15, 2024</p>
+            <p class="challenge-progress">38/50 tickets completed</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Department Standings -->
-    <div class="card shadow mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Department Standings</h5>
-        <ul id="employeeLeaderboard" class="list-group" aria-label="Department Leaderboard"></ul>
+    <!-- Department Score Section -->
+    <section class="dashboard-section">
+      <h2>Your Department Score <span class="sample-badge">Sample Data</span></h2>
+      <!-- Score card with achievements -->
+      <div class="score-card">
+        <div class="score-value">680</div>
+        <div class="score-label">Total Points</div>
+        <!-- Achievement badges with tooltips -->
+        <div class="score-badges">
+          <span title="High Achiever">🔥</span>
+          <span title="Second Place">🥈</span>
+          <span title="Team Spirit">⭐</span>
+        </div>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <!-- Recent Activity Section -->
+    <section class="dashboard-section">
+      <h2>Recent Activity <span class="sample-badge">Sample Data</span></h2>
+      <!-- Activity list with timestamps -->
+      <ul class="activity-list">
+        <li>
+          <span class="activity-time">2 hours ago</span>
+          <span class="activity-text">Earned 50 points for customer satisfaction</span>
+        </li>
+        <li>
+          <span class="activity-time">Yesterday</span>
+          <span class="activity-text">Completed team training session</span>
+        </li>
+        <li>
+          <span class="activity-time">2 days ago</span>
+          <span class="activity-text">Achieved weekly goal bonus</span>
+        </li>
+      </ul>
+    </section>
+  </main>
 
+  <!-- Footer section -->
+  <footer>&copy; 2025 CORE Platform</footer>
+
+  <!-- JavaScript for dashboard functionality -->
+  <script>
+    /**
+     * Shows a notification message to the user
+     * @param {string} text - The message to display
+     * @param {string} type - Message type ('success' or 'error')
+     */
+    function showNotification(text, type = 'success') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `form-feedback ${type}`;
+      
+      // Style the notification
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.animation = 'slideIn 0.3s ease-out';
+      
+      // Set notification content
+      notification.textContent = text;
+      
+      // Add to page
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    /**
+     * Retrieves challenges from localStorage
+     * @returns {Array} Array of challenge objects
+     */
+    function getChallenges() {
+        const challenges = localStorage.getItem('coreChallenges');
+        return challenges ? JSON.parse(challenges) : [];
+    }
+
+    /**
+     * Updates challenge progress in localStorage
+     * @param {Object} challenge - The challenge to update
+     */
+    function updateChallengeProgress(challenge) {
+        let challenges = getChallenges();
+        const index = challenges.findIndex(c => c.id === challenge.id);
+        if (index !== -1) {
+            challenges[index] = challenge;
+            localStorage.setItem('coreChallenges', JSON.stringify(challenges));
+        }
+    }
+
+    /**
+     * Displays a single challenge in the UI
+     * @param {Object} challenge - Challenge object to display
+     */
+    function displayChallenge(challenge) {
+        const progressPercent = Math.min(100, Math.round((challenge.progress || 0) * 100));
+        
+        const challengeCard = document.createElement('div');
+        challengeCard.className = 'challenge-card';
+        challengeCard.dataset.id = challenge.id;
+        
+        const formattedDate = new Date(challenge.deadline).toLocaleDateString();
+        
+        challengeCard.innerHTML = `
+            <h3>${challenge.title}</h3>
+            <p class="challenge-description">${challenge.description}</p>
+            <div class="progress-bar">
+                <div class="progress" style="width: ${progressPercent}%;">${progressPercent}%</div>
+            </div>
+            <div class="challenge-meta">
+                <p class="challenge-info">🎯 ${challenge.points} points | 📅 Due: ${formattedDate}</p>
+                <p class="challenge-progress">Progress: ${progressPercent}%</p>
+            </div>
+            <input type="number" class="progress-input" min="0" max="100" value="${progressPercent}" placeholder="Enter progress (0-100)">
+            <button class="update-progress" onclick="updateProgress(${challenge.id})">Update Progress</button>
+        `;
+        
+        document.getElementById('challengesList').appendChild(challengeCard);
+    }
+
+    /**
+     * Updates the progress of a challenge
+     * @param {number} challengeId - ID of the challenge to update
+     */
+    function updateProgress(challengeId) {
+        const challengeCard = document.querySelector(`[data-id="${challengeId}"]`);
+        const progressInput = challengeCard.querySelector('.progress-input');
+        const newProgress = Math.min(100, Math.max(0, parseInt(progressInput.value))) / 100;
+        
+        const challenges = getChallenges();
+        const challenge = challenges.find(c => c.id === challengeId);
+        
+        if (challenge) {
+            challenge.progress = newProgress;
+            updateChallengeProgress(challenge);
+            
+            // Update UI
+            const progressBar = challengeCard.querySelector('.progress');
+            const progressText = challengeCard.querySelector('.challenge-progress');
+            const progressPercent = Math.round(newProgress * 100);
+            
+            progressBar.style.width = `${progressPercent}%`;
+            progressBar.textContent = `${progressPercent}%`;
+            progressText.textContent = `Progress: ${progressPercent}%`;
+            
+            // Add to recent activity
+            addActivity(`Updated progress on "${challenge.title}" to ${progressPercent}%`);
+            showNotification('Progress updated successfully! 🎯');
+        }
+    }
+
+    /**
+     * Adds an activity to the recent activity list
+     * @param {string} text - Activity description
+     */
+    function addActivity(text) {
+        const activityList = document.querySelector('.activity-list');
+        const activityItem = document.createElement('li');
+        
+        activityItem.innerHTML = `
+            <span class="activity-time">Just now</span>
+            <span class="activity-text">${text}</span>
+        `;
+        
+        activityList.insertBefore(activityItem, activityList.firstChild);
+        
+        // Remove oldest activity if more than 5
+        if (activityList.children.length > 5) {
+            activityList.removeChild(activityList.lastChild);
+        }
+    }
+
+    /**
+     * Updates the challenges list with active challenges
+     */
+    function updateChallenges() {
+        const challengesList = document.getElementById('challengesList');
+        challengesList.innerHTML = ''; // Clear existing challenges
+        
+        const challenges = getChallenges();
+        if (challenges.length === 0) {
+            challengesList.innerHTML = '<p>No active challenges available.</p>';
+            return;
+        }
+        
+        challenges.forEach(challenge => {
+            displayChallenge(challenge);
+        });
+    }
+
+    // Initialize demo data if it doesn't exist
+    if (!localStorage.getItem('demoLeaderboard')) {
+      const demoLeaderboard = [
+        { name: 'Jane Smith', department: 'Marketing', points: 680, achievements: ['🔥', '🥈', '⭐'] },
+        { name: 'John Doe', department: 'Sales', points: 450, achievements: ['⭐'] },
+        { name: 'Mike Johnson', department: 'IT', points: 320, achievements: [] },
+        { name: 'Sarah Wilson', department: 'HR', points: 290, achievements: [] },
+        { name: 'Alex Brown', department: 'Finance', points: 275, achievements: [] }
+      ];
+      localStorage.setItem('demoLeaderboard', JSON.stringify(demoLeaderboard));
+    }
+
+    // Initialize demo challenges if they don't exist
+    if (!localStorage.getItem('coreChallenges')) {
+      const demoChallenges = [
+        {
+          id: 1,
+          title: 'Weekly Team Challenge',
+          description: 'Complete 50 customer support tickets as a team',
+          points: 100,
+          deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          progress: 0.75
+        },
+        {
+          id: 2,
+          title: 'Customer Satisfaction',
+          description: 'Achieve 95% customer satisfaction rating',
+          points: 150,
+          deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+          progress: 0.4
+        }
+      ];
+      localStorage.setItem('coreChallenges', JSON.stringify(demoChallenges));
+    }
+
+    // Get current employee data
+    const currentEmployee = JSON.parse(localStorage.getItem('currentEmployee'));
+    if (!currentEmployee) {
+      window.location.href = 'employee-login.html';
+    }
+
+    // Update dashboard with current employee data
+    document.addEventListener('DOMContentLoaded', () => {
+      // Update score card
+      const scoreValue = document.querySelector('.score-value');
+      if (scoreValue) {
+        scoreValue.textContent = currentEmployee.points;
+      }
+
+      // Update leaderboard
+      const leaderboard = JSON.parse(localStorage.getItem('demoLeaderboard'));
+      const currentEmployeeRank = leaderboard.findIndex(emp => emp.email === currentEmployee.email);
+      
+      // Update achievements based on rank
+      const scoreBadges = document.querySelector('.score-badges');
+      if (scoreBadges) {
+        scoreBadges.innerHTML = '';
+        if (currentEmployeeRank === 0) {
+          scoreBadges.innerHTML = '<span title="First Place">🥇</span>';
+        } else if (currentEmployeeRank === 1) {
+          scoreBadges.innerHTML = '<span title="Second Place">🥈</span>';
+        } else if (currentEmployeeRank === 2) {
+          scoreBadges.innerHTML = '<span title="Third Place">🥉</span>';
+        }
+        if (currentEmployee.points > 500) {
+          scoreBadges.innerHTML += '<span title="High Achiever">🔥</span>';
+        }
+        if (currentEmployee.points > 300) {
+          scoreBadges.innerHTML += '<span title="Team Spirit">⭐</span>';
+        }
+      }
+
+      // Load challenges
+      updateChallenges();
+
+      // Show welcome message when page loads
+      setTimeout(() => {
+        showNotification('🎉 Welcome to your dashboard!');
+      }, 1000);
+    });
+  </script>
 </body>
 </html>

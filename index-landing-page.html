@@ -1,65 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CORE | Collaborative Optimisation</title>
-
-  <!-- Load Bootstrap CSS from CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <!-- Custom inline styling for layout and visual polish -->
-  <style>
-    body {
-      background: linear-gradient(to right, #f8f9fa, #e0eafc); /* soft gradient bg */
-      min-height: 100vh;
-    }
-    .hero {
-      height: 90vh; /* almost full viewport height */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      flex-direction: column;
-    }
-    .btn-group-lg .btn {
-      min-width: 180px; /* keep buttons wide and uniform */
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      color: #666;
-    }
-  </style>
+  <title>CORE Productivity Platform</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-
-  <!-- Main hero content section -->
-  <div class="hero container">
-    <h1 class="display-4 fw-bold mb-3">Welcome to CORE</h1>
-    <p class="lead mb-4">Collaborative Optimisation for Results and Engagement</p>
-
-    <!-- Button group for navigation actions -->
-    <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mb-3">
-      <!-- Link to admin login -->
-      <a href="index-login.html" class="btn btn-primary btn-lg">Admin Login</a>
-
-      <!-- Link to company registration -->
-      <a href="register.html" class="btn btn-success btn-lg">Register Company</a>
-
-      <!-- Link to employee login page -->
-      <a href="employee-login.html" class="btn btn-secondary btn-lg">Employee Access</a>
+<body class="landing-page">
+  <header>
+    <h1>CORE Productivity Platform</h1>
+    <p>Boost collaboration. Encourage teams. Reward progress.</p>
+  </header>
+  <main>
+    <div class="button-container">
+      <button onclick="window.location.href='register.html'">Register a New Company</button>
+      <button onclick="window.location.href='index-login.html'">Admin Login</button>
+      <button onclick="window.location.href='employee-login.html'">Employee Login</button>
     </div>
-
-    <!-- Small report button below main actions -->
-    <a href="report-error.html" class="btn btn-outline-danger btn-sm mt-3">Report a Problem</a>
-  </div>
-
-  <!-- Footer text -->
+  </main>
   <footer>
-    &copy; CORE Project | Empowering Team Productivity
+    &copy; 2025 CORE Platform
   </footer>
-
 </body>
 </html>
